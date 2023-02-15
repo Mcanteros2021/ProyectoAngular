@@ -4,17 +4,43 @@ const { use } = require('.');
 var router = express.Router();
 
 /* GET login page. */
+
 router.get('/', function(req, res, next) {
   res.render('login', { title: 'Express' });
 });
-
+var a = router.get('/', function(req, res, next) {
+  res.render('login', { title: 'Express' });
+});
 
 router.post('/auth', (req, res) => {
 
   // Insert Login Code Here
   let username = req.body.username;
   let password = req.body.password;
-  res.send(`Username: ${username} Password: ${password}`);
+  
+  
+  var ldap = new LdapAuth({
+    url: 'ldap://localhost:389',
+    bindDN: 'cn=admin,dc=iesalixar,dc=org',
+    bindCredentials: 'passiesalixar',
+    searchBase: 'ou=alumnos,dc=iesalixar,dc=org',
+    searchFilter: '(uid={{username}})',
+    reconnect: true,
+  });
+
+  ldap.authenticate(username, password, function (err, user) {
+
+      if (err) {
+
+        return res.redirect('/login')
+     
+      
+     } else {
+      res.send(`Useruid: ${user.uid} Dc: ${user.dn}`);
+     }
+     
+    })
+
 });
 
 module.exports = router;
