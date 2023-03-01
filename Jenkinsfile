@@ -27,7 +27,7 @@ pipeline {
         sh '''npm start &
 sleep 1'''
         input '"Terminar"'
-        sh 'kill $(cat .pidfile)'
+        sh 'kill'
       }
     }
 
