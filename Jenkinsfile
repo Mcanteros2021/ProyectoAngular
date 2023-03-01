@@ -24,8 +24,7 @@ pipeline {
 
     stage('Deliver') {
       steps {
-        sh '''npm run build
-npm start &
+        sh '''npm start &
 sleep 1'''
         input '"Terminar"'
         sh 'kill $(cat .pidfile)'
